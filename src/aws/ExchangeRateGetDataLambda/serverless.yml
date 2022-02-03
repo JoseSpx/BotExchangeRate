@@ -20,34 +20,34 @@ service: exchange-rate-get-data-lambda
 # Check out our docs for more details
 frameworkVersion: '2'
 
+custom:
+  exchangeRateTableName: 'exchange-rate-${self:provider.stage}'
+
 provider:
   name: aws
   runtime: nodejs14.x
   lambdaHashingVersion: 20201221
 
-# you can overwrite defaults here
+  # you can overwrite defaults here
   stage: dev
   region: us-east-2
 
-# you can add statements to the Lambda function's IAM Role here
-#  iamRoleStatements:
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:ListBucket"
-#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
-#    - Effect: "Allow"
-#      Action:
-#        - "s3:PutObject"
-#      Resource:
-#        Fn::Join:
-#          - ""
-#          - - "arn:aws:s3:::"
-#            - "Ref" : "ServerlessDeploymentBucket"
-#            - "/*"
+  # you can add statements to the Lambda function's IAM Role here
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { 'Fn::GetAtt': ['ExchangeRateTable', 'Arn'] }
 
-# you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  # you can define service wide environment variables here
+  environment:
+    exchangeRateTableName: ${self:custom.exchangeRateTableName}
 
 # you can add packaging information here
 #package:
@@ -113,16 +113,25 @@ functions:
 #      variable2: value2
 
 # you can add CloudFormation resource templates here
-#resources:
-#  Resources:
-#    NewResource:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: my-new-bucket
-#  Outputs:
-#     NewOutput:
-#       Description: "Description for the output"
-#       Value: "Some output value"
+resources:
+  Resources:
+    ExchangeRateTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.exchangeRateTableName}
 
 plugins:
-- serverless-offline # adding the plugin to be able to run the offline emulation
+  - serverless-dynamodb-local
+  - serverless-offline 
+
