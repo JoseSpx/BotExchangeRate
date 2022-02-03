@@ -65,6 +65,11 @@ functions:
           path: exchange-rate
           method: get
           cors: true
+      - schedule:
+          name: exchange-rate-event
+          description: 'exchange-rate-event'
+          rate: rate(5 minutes)
+          enabled: true
   test:
     handler: handler.test
     events:

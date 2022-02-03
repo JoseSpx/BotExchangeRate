@@ -3,6 +3,7 @@ const scrapeIt = require("scrape-it");
 const AWS = require('aws-sdk');
 const uuid = require('uuid');
 const dayjs = require('dayjs');
+const logger = require('pino')();
 
 const { IS_OFFLINE } = process.env;
 
@@ -26,9 +27,9 @@ const getExchangeRateData = async (event) => {
     }
   });
 
+  logger.info(`Data read: ${JSON.stringify(data.data)}'`);
 
   const { lastClose, buySell, dayRate } = data.data;
-
   const params = {
     TableName: process.env.exchangeRateTableName,
     Item: {
