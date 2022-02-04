@@ -1,5 +1,5 @@
 {
-  "name": "FeedProcessorLambda",
+  "name": "feed-processor-lambda",
   "version": "1.0.0",
   "description": "",
   "main": "handler.js",
@@ -11,5 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "pino": "^7.6.5"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.4.0"
   }
 }

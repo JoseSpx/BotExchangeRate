@@ -20,6 +20,9 @@ service: feedprocessorlambda
 # Check out our docs for more details
 frameworkVersion: '2'
 
+custom:
+  topicArn: 'arn:aws:sns:us-east-2:310109826654:ExchangeRateSNSTopicDev'
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -38,11 +41,15 @@ provider:
         - dynamodb:GetShardIterator
         - dynamodb:ListStreams
       Resource: arn:aws:dynamodb:us-east-2:310109826654:table/exchange-rate-dev/stream/*
+    - Effect: "Allow"
+      Action: 
+        - SNS:Publish
+      Resource: ${self:custom.topicArn}
 
 
 # you can define service wide environment variables here
-#  environment:
-#    variable1: value1
+  environment:
+    topicArn: ${self:custom.topicArn}
 
 # you can add packaging information here
 #package:
