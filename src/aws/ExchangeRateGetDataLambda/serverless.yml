@@ -60,6 +60,10 @@ provider:
 functions:
   exchangeRate:
     handler: handler.getExchangeRateData
+    environment:
+      NODE_PATH: './:/opt/node_modules'
+    layers:
+      - arn:aws:lambda:us-east-2:310109826654:layer:ExchangeRateLayer:1
     events:
       - http:
           path: exchange-rate

@@ -9,13 +9,13 @@
   "author": "Jose Suarez",
   "license": "MIT",
   "devDependencies": {
-    "serverless-offline": "^8.4.0"
+    "pino": "^7.6.5",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-offline": "^8.4.0",
+    "uuid": "^8.3.2"
   },
   "dependencies": {
     "dayjs": "^1.10.7",
-    "pino": "^7.6.5",
-    "scrape-it": "^5.3.2",
-    "serverless-dynamodb-local": "^0.2.40",
-    "uuid": "^8.3.2"
+    "scrape-it": "^5.3.2"
   }
 }
