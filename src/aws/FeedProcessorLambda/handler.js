@@ -10,22 +10,28 @@ module.exports.processorData = async (event) => {
   logger.info(event);
   
   const records = event.Records;
-  records.forEach(item => {
+  for(const item of records) {
     if (item.eventName !== 'INSERT') return;
     const data = item.dynamodb.NewImage;
-    logger.info('Exchange Data');
-    logger.info(data);
+    logger.info({ description: 'Exchange Data'}, data);
 
-    SNS.publish({
-      Message: JSON.stringify(data),
-      TopicArn: topicArn
-    }, (err, data) => {
-      if (err) {
-        logger.error(err.stack);
-        return;
-      }
-      logger.info('push sent');
-      logger.info(data);
-    })
-  })
+    const message = {
+      buyPrice: data.buySell['S'].split('/')[0],
+      sellPrice: data.buySell['S'].split('/')[1],
+      dayRate: data.dayRate['S'],
+      lastClose: data.lastClose['S']
+    }
+    
+    try {
+      const result = await SNS.publish({
+        Message: JSON.stringify(message),
+        TopicArn: topicArn
+      }).promise();
+    
+      logger.info(result);
+    } catch(err) {
+      logger.error(err);
+    }
+  }
+
 };

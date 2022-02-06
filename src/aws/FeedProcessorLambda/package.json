@@ -9,10 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "pino": "^7.6.5"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "pino": "^7.6.5",
     "serverless-offline": "^8.4.0"
   }
 }
