@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "aws-sdk": "^2.1069.0",
+    "pino": "^7.6.5",
     "serverless-offline": "^8.4.0"
   },
   "dependencies": {
-    "pino": "^7.6.5"
+    "twitter-api-v2": "^1.10.0"
   }
 }
